@@ -31,12 +31,15 @@ int main(int argc, char** argv)
     std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
 
     std::string directory = argv[1];
+    std::string finalChar = directory.substr(directory.length() - 1, 1);
 
     // Append a backslash if there isn't one so listdir recieves correct input format
-    if (directory.substr(directory.length(), 1) != "\\")
+    if (finalChar != "\\" && finalChar != "/")
     {
         directory += "\\";
     }
+
+    std::cout << "Directory in question: " << directory << std::endl << std::endl;
 
     if (argc > 2)
     {
@@ -52,7 +55,7 @@ int main(int argc, char** argv)
     int totalLinesFound = 0;
 
     std::cout << "Counting files..." << std::endl << std::endl;
-    for (int i = 0; i < fileList.size(); i++)
+    for (unsigned int i = 0; i < fileList.size(); i++)
     {
         if (!isExcluded(fileList[i]))
             totalLinesFound += countNumberLines(fileList[i]);
@@ -75,7 +78,7 @@ std::vector<std::string> listdir(const std::string& path)
 
     dp = opendir(path.c_str());
     if (dp == NULL) {
-        printf("opendir: Path %s does not exist or could not be read.", path);
+        printf("opendir: Path %s does not exist or could not be read.", path.c_str());
         exit(-1);
     }
 
@@ -105,7 +108,7 @@ std::vector<std::string> listdir(const std::string& path)
             }
         }
 
-        for (int i = 0; i < subDirectoryFileList.size(); i++)
+        for (unsigned int i = 0; i < subDirectoryFileList.size(); i++)
         {
             fileList.push_back(subDirectoryFileList[i]);
         }
@@ -144,7 +147,7 @@ int countNumberLines(const std::string& path)
 
 bool isExcluded(const std::string& file)
 {
-    for (int i = 0; i < excludedFiles.size(); i++)
+    for (unsigned int i = 0; i < excludedFiles.size(); i++)
     {
         if (file == excludedFiles[i])
         {
