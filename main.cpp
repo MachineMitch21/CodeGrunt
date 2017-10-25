@@ -15,13 +15,28 @@ std::vector<std::string> excludedFiles;
 int linesInBiggestFile = 0;
 std::string biggestFile;
 
-std::vector<std::string> listdir(const char *path);
+std::vector<std::string> listdir(const std::string& path);
 int countNumberLines(const std::string& file);
 bool isExcluded(const std::string& file);
 bool isDirectory(const std::string& path);
 
 int main(int argc, char** argv)
 {
+    if (argc < 2)
+    {
+        std::cerr << "Usage: lines [directory-of-source-files] (Excluding files is optional) [files-to-exclude]" << std::endl;
+        return -1;
+    }
+
+    std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
+
+    std::string directory = argv[1];
+
+    // Append a backslash if there isn't one so listdir recieves correct input format
+    if (directory.substr(directory.length(), 1) != "\\")
+    {
+        directory += "\\";
+    }
 
     if (argc > 2)
     {
@@ -31,16 +46,8 @@ int main(int argc, char** argv)
         }
     }
 
-    std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
-
-    if (argc < 2)
-    {
-        std::cerr << "Usage: lines [directory-of-source-files] (Excluding files is optional) [files-to-exclude]" << std::endl;
-        return -1;
-    }
-
     std::cout << "Locating files..." << std::endl << std::endl;
-    fileList = listdir(argv[1]);
+    fileList = listdir(directory);
 
     int totalLinesFound = 0;
 
@@ -59,14 +66,14 @@ int main(int argc, char** argv)
     return 0;
 }
 
-std::vector<std::string> listdir(const char* path)
+std::vector<std::string> listdir(const std::string& path)
 {
     std::vector<std::string> fileList;
 
     struct dirent *entry;
     DIR *dp;
 
-    dp = opendir(path);
+    dp = opendir(path.c_str());
     if (dp == NULL) {
         printf("opendir: Path %s does not exist or could not be read.", path);
         exit(-1);
@@ -79,7 +86,7 @@ std::vector<std::string> listdir(const char* path)
 
         std::vector<std::string> subDirectoryFileList;
 
-        std::string name = std::string(path) + std::string(entry->d_name);
+        std::string name = path + std::string(entry->d_name);
 
         // We do not want to include current and previous directory entries
         // in the fileList ('.' and '..' and the 1st and 2nd entries in dirent struct)
