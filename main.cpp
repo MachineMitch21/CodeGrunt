@@ -5,6 +5,7 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include <sys/stat.h>
 
 #define VERSION "0.0.2"
 
@@ -14,6 +15,7 @@ std::vector<std::string> excludedFiles;
 std::vector<std::string> listdir(const char *path);
 int countNumberLines(const std::string& file);
 bool isExcluded(const std::string& file);
+bool isDirectory(const std::string& path);
 
 int main(int argc, char** argv)
 {
@@ -34,14 +36,16 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    std::cout << "Locating files..." << std::endl << std::endl;
     fileList = listdir(argv[1]);
 
     int totalLinesFound = 0;
 
+    std::cout << "Counting files..." << std::endl << std::endl;
     for (int i = 0; i < fileList.size(); i++)
     {
         if (!isExcluded(fileList[i]))
-            totalLinesFound += countNumberLines(std::string(argv[1]) + fileList[i]);
+            totalLinesFound += countNumberLines(fileList[i]);
     }
 
     std::cout << "LINES FOUND: " << totalLinesFound << std::endl << std::endl;
@@ -57,7 +61,7 @@ std::vector<std::string> listdir(const char* path)
 
     dp = opendir(path);
     if (dp == NULL) {
-        perror("opendir: Path does not exist or could not be read.");
+        printf("opendir: Path %s does not exist or could not be read.", path);
         exit(-1);
     }
 
@@ -66,9 +70,30 @@ std::vector<std::string> listdir(const char* path)
     {
         fileCount++;
 
-        std::string name = std::string(entry->d_name);
+        std::vector<std::string> subDirectoryFileList;
+
+        std::string name = std::string(path) + std::string(entry->d_name);
+
+        // We do not want to include current and previous directory entries
+        // in the fileList ('.' and '..' and the 1st and 2nd entries in dirent struct)
         if (fileCount > 2)
-            fileList.push_back(name);
+        {
+            if (isDirectory(name))
+            {
+                name += "\\";
+                // Recursively find all files in all subdirectories as well
+                subDirectoryFileList = listdir(name.c_str());
+            }
+            else
+            {
+                fileList.push_back(name);
+            }
+        }
+
+        for (int i = 0; i < subDirectoryFileList.size(); i++)
+        {
+            fileList.push_back(subDirectoryFileList[i]);
+        }
     }
 
     closedir(dp);
@@ -107,4 +132,24 @@ bool isExcluded(const std::string& file)
     }
 
     return false;
+}
+
+bool isDirectory(const std::string& path)
+{
+    struct stat s;
+    bool isDirectory = false;
+
+    if (stat(path.c_str(), &s) == 0)
+    {
+        if( s.st_mode & S_IFDIR )
+        {
+            isDirectory = true;
+        }
+        else
+        {
+            isDirectory = false;
+        }
+    }
+
+    return isDirectory;
 }
