@@ -12,6 +12,9 @@
 std::vector<std::string> fileList;
 std::vector<std::string> excludedFiles;
 
+int linesInBiggestFile = 0;
+std::string biggestFile;
+
 std::vector<std::string> listdir(const char *path);
 int countNumberLines(const std::string& file);
 bool isExcluded(const std::string& file);
@@ -48,7 +51,11 @@ int main(int argc, char** argv)
             totalLinesFound += countNumberLines(fileList[i]);
     }
 
-    std::cout << "LINES FOUND: " << totalLinesFound << std::endl << std::endl;
+    std::cout << "TOTAL LINES FOUND:    " << totalLinesFound << std::endl << std::endl;
+
+    std::cout << "Biggest FILE:         " << biggestFile << std::endl << std::endl;
+
+    std::cout << "Biggest FILE LINES:   " << linesInBiggestFile << std::endl << std::endl;
     return 0;
 }
 
@@ -80,6 +87,7 @@ std::vector<std::string> listdir(const char* path)
         {
             if (isDirectory(name))
             {
+                // We have to append a backslash at the end of subdirectory entries
                 name += "\\";
                 // Recursively find all files in all subdirectories as well
                 subDirectoryFileList = listdir(name.c_str());
@@ -117,6 +125,12 @@ int countNumberLines(const std::string& path)
     }
 
     fis.close();
+
+    if (numberOfLines > linesInBiggestFile)
+    {
+        biggestFile = path;
+        linesInBiggestFile = numberOfLines;
+    }
 
     return numberOfLines;
 }
