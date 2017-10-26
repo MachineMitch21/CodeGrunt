@@ -1,11 +1,4 @@
 #include <iostream>
-#include <stdio.h>
-#include <dirent.h>
-#include <vector>
-#include <cstring>
-#include <string>
-#include <fstream>
-#include <sys/stat.h>
 
 #include "LineCounter.h"
 #include "DirectoryParser.h"

@@ -33,7 +33,7 @@ namespace lc
     {
         for (unsigned int i = 0; i < _excludedFiles.size(); i++)
         {
-            if (file == _excludedFiles[i])
+            if (findNameInPath(file) == _excludedFiles[i])
             {
                 return true;
             }
@@ -139,5 +139,38 @@ namespace lc
         {
             std::cerr << "ERROR: Trying to add seperator to file.  Action ignored" << std::endl;
         }
+    }
+
+    std::string DirectoryParser::findNameInPath(const std::string& path)
+    {
+        bool foundSeperator = false;
+
+        int length      = path.length();
+        int lastIndex   = length - 1;
+
+        std::string name = "";
+
+        // Iterate in reverse over through the path
+        // Until a seperator character is found
+        for (int i = lastIndex; i >= 0; i--)
+        {
+            if (path[i] == '\\' || path[i] == '/')
+            {
+                foundSeperator = true;
+
+                // i is at seperator so we need the char at the index ahead of i
+                // length - 1 gives us the length of the file name in the path
+                name = path.substr(i + 1, length - i);
+                break;
+            }
+        }
+
+        if (!foundSeperator)
+        {
+            std::cout << "Path specified is already just a file name" << std::endl;
+            name = path;
+        }
+
+        return name;
     }
 }

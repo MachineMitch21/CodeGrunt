@@ -8,6 +8,7 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <iostream>
+#include <stdio.h>
 
 namespace lc
 {
@@ -29,6 +30,7 @@ namespace lc
         std::vector<std::string> listdir(const std::string& path);
         bool isDirectory(const std::string& path);
         void verifySeperator(std::string& directory);
+        std::string findNameInPath(const std::string& path);
 
     private:
         std::vector<std::string>    _fileList;
