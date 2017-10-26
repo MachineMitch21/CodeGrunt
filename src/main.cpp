@@ -1,11 +1,14 @@
 #include <iostream>
+#include <cmath>
 
 #include "LineCounter.h"
 #include "DirectoryParser.h"
 
 using namespace lc;
 
-#define VERSION "0.0.2"
+#define VERSION "0.1.0"
+
+#define PERCENTAGE_STEP 5
 
 int main(int argc, char** argv)
 {
@@ -35,10 +38,24 @@ int main(int argc, char** argv)
     std::vector<std::string> fileList = dirParser.getFileList();
 
     std::cout << "Counting files..." << std::endl << std::endl;
+
+    int lastPercentageCheck = 0;
+
     for (unsigned int i = 0; i < fileList.size(); i++)
     {
         if (!dirParser.isExcluded(fileList[i]))
+        {
+            // Check the percent of the fileList that has been checked so far
+            int percentage = round(((float)(i + 1) / (float)fileList.size()) * 100.0f);
+            if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
+            {
+                // Only display percentages every 5% as to not spam the console
+                std::cout << "[" << percentage << "%]" << std::endl;
+                lastPercentageCheck = percentage;
+            }
+
             LineCounter::countNumberLines(fileList[i]);
+        }
     }
 
     std::cout << "TOTAL LINES FOUND:    " << LineCounter::getTotalLines() << std::endl << std::endl;
