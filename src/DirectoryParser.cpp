@@ -33,7 +33,7 @@ namespace lc
     {
         for (unsigned int i = 0; i < _excludedFiles.size(); i++)
         {
-            if (findNameInPath(file) == _excludedFiles[i])
+            if (findNameInPath(file) == findNameInPath(_excludedFiles[i]))
             {
                 return true;
             }
@@ -167,7 +167,6 @@ namespace lc
 
         if (!foundSeperator)
         {
-            std::cout << "Path specified is already just a file name" << std::endl;
             name = path;
         }
 
