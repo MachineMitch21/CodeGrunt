@@ -21,26 +21,11 @@ namespace lc
         return _totalLinesFound;
     }
 
-    void LineCounter::countNumberLines(const std::string& path)
+    void LineCounter::updateCount(const std::string& file, int numberOfLines)
     {
-        std::ifstream fis(path);
-
-        int numberOfLines = 0;
-
-        if (fis.is_open())
-        {
-            std::string line;
-            while(std::getline(fis, line))
-            {
-                numberOfLines++;
-            }
-        }
-
-        fis.close();
-
         if (numberOfLines > _biggestFile.Lines)
         {
-            _biggestFile.Name = path;
+            _biggestFile.Name = file;
             _biggestFile.Lines = numberOfLines;
         }
 

@@ -15,9 +15,10 @@ namespace lc
 
     class LineCounter
     {
+
+        friend class FileManager;
+
     public:
-        static void         countNumberLines(const std::string& file);
-        static void         setBiggestFile(BiggestFile file);
         static BiggestFile  getBiggestFile();
         static int          getTotalLines();
 
@@ -26,6 +27,8 @@ namespace lc
         ~LineCounter();
 
     private:
+        static void         setBiggestFile(BiggestFile file);
+        static void         updateCount(const std::string& file, int numberOfLines);
         static int          _totalLinesFound;
         static BiggestFile  _biggestFile;
     };

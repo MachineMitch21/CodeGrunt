@@ -3,6 +3,8 @@
 
 #include "LineCounter.h"
 #include "DirectoryParser.h"
+#include "SearchManager.h"
+#include "FileManager.h"
 
 using namespace lc;
 
@@ -14,7 +16,8 @@ int main(int argc, char** argv)
 {
     if (argc < 2)
     {
-        std::cerr << "Usage: lines [directory-of-source-files] (Excluding files is optional) [files-to-exclude]" << std::endl;
+        std::cerr << "Usage: lines [directory-of-source-files]  --exclude (Excluding files is optional) [files-to-exclude]"
+                                                             << "--search (Searching is optional) [words-to-search-for]" << std::endl;
         return -1;
     }
 
@@ -23,12 +26,48 @@ int main(int argc, char** argv)
     std::string directory = argv[1];
 
     DirectoryParser dirParser(directory, false);
+    FileManager fileManager;
 
     if (argc > 2)
     {
         for (int i = 2; i < argc; i++)
         {
-            dirParser.addExcludedFile(std::string(argv[i]));
+            std::string arg(argv[i]);
+
+            if (arg == "--exclude")
+            {
+                for (int j = i + 1; j < argc; j++)
+                {
+                    std::string arg(argv[j]);
+
+                    if (arg != "--search")
+                    {
+                        dirParser.addExcludedFile(arg);
+                        i++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            else if (arg == "--search")
+            {
+                for (int j = i + 1; j < argc; j++)
+                {
+                    std::string arg(argv[j]);
+
+                    if (arg != "--exclude")
+                    {
+                        SearchManager::addSearchCriteria(arg);
+                        i++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -54,14 +93,30 @@ int main(int argc, char** argv)
                 lastPercentageCheck = percentage;
             }
 
-            LineCounter::countNumberLines(fileList[i]);
+            fileManager.processFile(fileList[i]);
         }
     }
+
+    std::cout << std::endl;
 
     std::cout << "TOTAL LINES FOUND:    " << LineCounter::getTotalLines() << std::endl << std::endl;
 
     std::cout << "Biggest FILE:         " << LineCounter::getBiggestFile().Name << std::endl << std::endl;
 
     std::cout << "Biggest FILE LINES:   " << LineCounter::getBiggestFile().Lines << std::endl << std::endl;
+
+    std::cout << "-----------------------Search Criteria-------------------------" << std::endl << std::endl;
+
+    std::map<std::string, SearchData> searchResults = SearchManager::getAllSearchData();
+
+    for (std::map<std::string, SearchData>::iterator it = searchResults.begin(); it != searchResults.end(); ++it)
+    {
+        std::string criteria    = it->first;
+        SearchData results      = it->second;
+
+        std::cout << "SEARCH CRITERIA (" << criteria << ") appeared " << results.NumOccurences << " times." << std::endl << std::endl;
+    }
+
+    std::cout << "--------------------END SEARCH CRITERIA------------------------" << std::endl << std::endl;
     return 0;
 }
