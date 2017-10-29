@@ -61,7 +61,7 @@ namespace lc
                                 // it onto the argument list of the current command
                                 // that we previously found
                                 _cmdArgs[_commands[command]].push_back(arg);
-                                i++;
+                                i = j;
                             }
                             else
                             {
