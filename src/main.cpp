@@ -9,7 +9,7 @@
 
 using namespace lc;
 
-#define VERSION "0.2.0"
+#define VERSION "0.2.5"
 
 #define PERCENTAGE_STEP 5
 
@@ -18,28 +18,24 @@ int main(int argc, char** argv)
     ArgumentParser argParser;
     PARSE_STAT p_stat = argParser.parseArgs(argc, argv);
 
-    std::vector<std::string> args = argParser.getCommandArguments(COMMAND::SEARCH);
-
-    for (unsigned int i = 0; i < args.size(); i++)
+    if (p_stat != PARSE_STAT::PARSE_OKAY)
     {
-        std::cout << "Search argument: " << args[i] << std::endl;
+        std::cout << "USAGE: lines [directory] (optional commands) --search [words/phrases to search for] --exclude [files-to-exclude]" << std::endl;
     }
-
-    std::cout << "Directory in question: " << argParser.getDirectory() << std::endl;
 
     if (p_stat == PARSE_STAT::PARSE_INVALID_DIRECTORY)
     {
-        std::cerr << "Unknown directory was specified or you didn't specify one" << std::endl << std::endl;
+        std::cerr << "ERROR: Unknown directory was specified or you didn't specify one" << std::endl << std::endl;
         return -1;
     }
     else if (p_stat == PARSE_STAT::PARSE_INVALID_COMMAND)
     {
-        std::cerr << "Unknown command was used" << std::endl << std::endl;
+        std::cerr << "ERROR: Unknown command was used" << std::endl << std::endl;
         return -1;
     }
     else if (p_stat == PARSE_STAT::PARSE_UNKOWN_ERROR)
     {
-        std::cerr << "An Unknown error has occured" << std::endl << std::endl;
+        std::cerr << "ERROR: An Unknown error has occured" << std::endl << std::endl;
         return -1;
     }
 
