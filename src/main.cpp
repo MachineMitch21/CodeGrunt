@@ -5,6 +5,7 @@
 #include "DirectoryParser.h"
 #include "SearchManager.h"
 #include "FileManager.h"
+#include "ArgumentParser.h"
 
 using namespace lc;
 
@@ -24,6 +25,12 @@ int main(int argc, char** argv)
     std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
 
     std::string directory = argv[1];
+
+    ArgumentParser argParser;
+
+    argParser.parseArgs(argc, argv);
+
+    std::cout << argParser.getDirectory() << std::endl;
 
     DirectoryParser dirParser(directory, false);
     FileManager fileManager;
