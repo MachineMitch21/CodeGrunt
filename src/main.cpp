@@ -81,18 +81,22 @@ int main(int argc, char** argv)
 
     std::cout << "Biggest FILE LINES:   " << LineCounter::getBiggestFile().Lines << std::endl << std::endl;
 
-    std::cout << "-----------------------Search Criteria-------------------------" << std::endl << std::endl;
 
     std::map<std::string, SearchData> searchResults = SearchManager::getAllSearchData();
 
-    for (std::map<std::string, SearchData>::iterator it = searchResults.begin(); it != searchResults.end(); ++it)
+    if (searchResults.size() > 0)
     {
-        std::string criteria    = it->first;
-        SearchData results      = it->second;
+        std::cout << "-----------------------Search Criteria-------------------------" << std::endl << std::endl;
 
-        std::cout << "SEARCH CRITERIA (" << criteria << ") appeared " << results.NumOccurences << " times." << std::endl << std::endl;
+        for (std::map<std::string, SearchData>::iterator it = searchResults.begin(); it != searchResults.end(); ++it)
+        {
+            std::string criteria    = it->first;
+            SearchData results      = it->second;
+
+            std::cout << "SEARCH CRITERIA (" << criteria << ") appeared " << results.NumOccurences << " times." << std::endl << std::endl;
+        }
+
+        std::cout << "--------------------END SEARCH CRITERIA------------------------" << std::endl << std::endl;
     }
-
-    std::cout << "--------------------END SEARCH CRITERIA------------------------" << std::endl << std::endl;
     return 0;
 }
