@@ -15,68 +15,41 @@ using namespace lc;
 
 int main(int argc, char** argv)
 {
-    if (argc < 2)
+    ArgumentParser argParser;
+    PARSE_STAT p_stat = argParser.parseArgs(argc, argv);
+
+    std::vector<std::string> args = argParser.getCommandArguments(COMMAND::SEARCH);
+
+    for (unsigned int i = 0; i < args.size(); i++)
     {
-        std::cerr << "Usage: lines [directory-of-source-files]  --exclude (Excluding files is optional) [files-to-exclude]"
-                                                             << "--search (Searching is optional) [words-to-search-for]" << std::endl;
+        std::cout << "Search argument: " << args[i] << std::endl;
+    }
+
+    std::cout << "Directory in question: " << argParser.getDirectory() << std::endl;
+
+    if (p_stat == PARSE_STAT::PARSE_INVALID_DIRECTORY)
+    {
+        std::cerr << "Unknown directory was specified or you didn't specify one" << std::endl << std::endl;
+        return -1;
+    }
+    else if (p_stat == PARSE_STAT::PARSE_INVALID_COMMAND)
+    {
+        std::cerr << "Unknown command was used" << std::endl << std::endl;
+        return -1;
+    }
+    else if (p_stat == PARSE_STAT::PARSE_UNKOWN_ERROR)
+    {
+        std::cerr << "An Unknown error has occured" << std::endl << std::endl;
         return -1;
     }
 
     std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
 
-    std::string directory = argv[1];
-
-    ArgumentParser argParser;
-
-    argParser.parseArgs(argc, argv);
-
-    std::cout << argParser.getDirectory() << std::endl;
-
-    DirectoryParser dirParser(directory, false);
+    DirectoryParser dirParser(argParser.getDirectory(), false);
     FileManager fileManager;
 
-    if (argc > 2)
-    {
-        for (int i = 2; i < argc; i++)
-        {
-            std::string arg(argv[i]);
-
-            if (arg == "--exclude")
-            {
-                for (int j = i + 1; j < argc; j++)
-                {
-                    std::string arg(argv[j]);
-
-                    if (arg != "--search")
-                    {
-                        dirParser.addExcludedFile(arg);
-                        i++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            else if (arg == "--search")
-            {
-                for (int j = i + 1; j < argc; j++)
-                {
-                    std::string arg(argv[j]);
-
-                    if (arg != "--exclude")
-                    {
-                        SearchManager::addSearchCriteria(arg);
-                        i++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-    }
+    SearchManager::addAllCriteria(argParser.getCommandArguments(COMMAND::SEARCH));
+    dirParser.addAllExcludedFiles(argParser.getCommandArguments(COMMAND::EXCLUDE));
 
     std::cout << "Locating files..." << std::endl << std::endl;
     dirParser.parse();

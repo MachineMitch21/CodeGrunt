@@ -30,48 +30,45 @@ namespace lc
     {
         std::string command;
 
-        if (argc > 2)
+        if (argc > 1)
         {
-            for (int i = 2; i < argc; i++)
+            _directory = argv[1];
+
+            if (argc > 2)
             {
-                std::string arg(argv[i]);
-
-                if (isCommand(arg))
+                for (int i = 2; i < argc; i++)
                 {
-                    command = arg;
+                    std::string arg(argv[i]);
 
-                    for (int j = i + 1; j < argc; j++)
+                    if (isCommand(arg))
                     {
-                        std::string arg(argv[j]);
+                        command = arg;
 
-                        if (!isCommand(arg))
+                        for (int j = i + 1; j < argc; j++)
                         {
-                            _cmdArgs[_commands[command]].push_back(arg);
-                            i++;
-                        }
-                        else
-                        {
-                            break;
+                            std::string arg(argv[j]);
+
+                            if (!isCommand(arg))
+                            {
+                                _cmdArgs[_commands[command]].push_back(arg);
+                                i++;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    return PARSE_INVALID_COMMAND;
+                    else
+                    {
+                        return PARSE_INVALID_COMMAND;
+                    }
                 }
             }
         }
-        else if (argc < 2)
-        {
-            return PARSE_INVALID_DIRECTORY;
-        }
-        else if (argc == 2)
-        {
-            _directory = std::string(argv[1]);
-        }
         else
         {
-            return PARSE_UNKOWN_ERROR;
+            return PARSE_INVALID_DIRECTORY;
         }
 
         return PARSE_OKAY;
