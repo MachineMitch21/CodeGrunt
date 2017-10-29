@@ -6,7 +6,7 @@ if (UNIX)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 endif (UNIX)
 
-project(lines)
+project(codegrunt)
 
 SET(CMAKE_CXX_FLAGS "-std=c++17 -g -Wall")
 
