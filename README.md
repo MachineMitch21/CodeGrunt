@@ -4,10 +4,13 @@ LINES
 A utility program for gathering statistics about a code -base.
 
 FEATURES:
+
 	1. Counts lines of all files in a directory
+
 	2. Gathers search stats about the code-base (or any other types of 'text based' files)
 		
 COMMANDS: 
+
 	1. --exclude
 		a. Is used to exclude files from being processed
 			a.1 Excludes all files from processing (counting, searching, etc)
@@ -21,4 +24,4 @@ COMMANDS:
 
 FINAL THOUGHTS:
 
-	Commands can be entered in any order and multiple times if you want (Ex. lines [directory]  --search hi  --search thing  --exclude somefile.txt) is a valid entry.
+	Commands can be entered in any order and multiple times if you want (Ex. lines [directory]  --search hi  --search thing --exclude somefile.txt) is a valid entry.
