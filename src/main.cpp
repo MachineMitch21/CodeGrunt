@@ -109,11 +109,11 @@ int main(int argc, char** argv)
             threads[i].join();
         }
 
+        fileIndex += threads.size();
         threads.clear();
-        fileIndex += nThreads;
 
         // Check the percent of the fileList that has been checked so far
-        int percentage = round(((float)(fileIndex + 1) / (float)fileListSize) * 100.0f);
+        int percentage = round(((float)(fileIndex) / (float)fileListSize) * 100.0f);
         if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
         {
             // Only display percentages every 5% as to not spam the console
