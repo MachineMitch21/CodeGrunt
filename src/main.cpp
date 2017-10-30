@@ -1,5 +1,9 @@
 #include <iostream>
 #include <cmath>
+#include <mingw.thread.h>
+#include <mingw.mutex.h>
+#include <deque>
+#include <ctime>
 
 #include "LineCounter.h"
 #include "DirectoryParser.h"
@@ -13,8 +17,20 @@ using namespace lc;
 
 #define PERCENTAGE_STEP 5
 
+void processFile(std::string& file)
+{
+    FileManager fileManager;
+    fileManager.processFile(file);
+}
+
 int main(int argc, char** argv)
 {
+    std::clock_t start;
+    double duration;
+    start = std::clock();
+
+    unsigned int nThreads = std::thread::hardware_concurrency();
+
     ArgumentParser argParser;
     PARSE_STAT p_stat = argParser.parseArgs(argc, argv);
 
@@ -56,24 +72,69 @@ int main(int argc, char** argv)
 
     int lastPercentageCheck = 0;
 
+
+    // Erase all excluded files
+    // TODO: Do this better
     for (unsigned int i = 0; i < fileList.size(); i++)
     {
-        if (!dirParser.isExcluded(fileList[i]))
+        if (dirParser.isExcluded(fileList[i]))
         {
-            // Check the percent of the fileList that has been checked so far
-            int percentage = round(((float)(i + 1) / (float)fileList.size()) * 100.0f);
-            if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
-            {
-                // Only display percentages every 5% as to not spam the console
-                std::cout << "[" << percentage << "%]" << std::endl;
-                lastPercentageCheck = percentage;
-            }
-
-            fileManager.processFile(fileList[i]);
+            fileList.erase(fileList.begin() + i);
         }
     }
 
-    std::cout << std::endl;
+    int fileListSize = fileList.size();
+
+    std::deque<std::string> fileQueue(fileList.begin(), fileList.end());
+
+    std::vector<std::thread> threads;
+
+    int fileIndex = 0;
+    while (!fileQueue.empty())
+    {
+        // Check the percent of the fileList that has been checked so far
+        int percentage = round(((float)(fileIndex + 1) / (float)fileListSize) * 100.0f);
+        if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
+        {
+            // Only display percentages every 5% as to not spam the console
+            std::cout << "[" << percentage << "%]" << std::endl;
+            lastPercentageCheck = percentage;
+        }
+
+        std::string file1 = fileQueue.back();
+        fileQueue.pop_back();
+        std::thread secondaryProcess(processFile, file1);
+
+        if (!fileQueue.empty())
+        {
+            std::string file2 = fileQueue.back();
+            fileQueue.pop_back();
+            fileManager.processFile(file2);
+        }
+
+        secondaryProcess.join();
+        fileIndex += 2;
+    }
+
+    // Keep this code for easy comparison between threaded and non-threaded version for now
+    // for (unsigned int i = 0; i < fileList.size(); i++)
+    // {
+    //     int percentage = round(((float)(i + 1) / (float)fileList.size()) * 100.0f);
+    //     if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
+    //     {
+    //         // Only display percentages every 5% as to not spam the console
+    //         std::cout << "[" << percentage << "%]" << std::endl;
+    //         lastPercentageCheck = percentage;
+    //     }
+    //
+    //     fileManager.processFile(fileList[i]);
+    // }
+
+    std::cout << std::endl << std::endl;
+
+    duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+
+    std::cout << "Execution took: " << duration << " seconds." << std::endl << std::endl;
 
     std::cout << "TOTAL LINES FOUND:    " << LineCounter::getTotalLines() << std::endl << std::endl;
 
