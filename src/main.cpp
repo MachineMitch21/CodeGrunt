@@ -96,6 +96,7 @@ int main(int argc, char** argv)
     {
         for (int i = 0; i < nThreads; i++)
         {
+            // Generate a new thread while there are still items in the deque
             if (!fileQueue.empty())
             {
                 std::string file = fileQueue.back();
@@ -104,6 +105,8 @@ int main(int argc, char** argv)
             }
         }
 
+        // Make sure all our current threads finish executing before we destroy them
+        // and start all over again
         for (int i = 0; i < threads.size(); i++)
         {
             threads[i].join();
@@ -121,20 +124,6 @@ int main(int argc, char** argv)
             lastPercentageCheck = percentage;
         }
     }
-
-    // Keep this code for easy comparison between threaded and non-threaded version for now
-    // for (unsigned int i = 0; i < fileList.size(); i++)
-    // {
-    //     int percentage = round(((float)(i + 1) / (float)fileList.size()) * 100.0f);
-    //     if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
-    //     {
-    //         // Only display percentages every 5% as to not spam the console
-    //         std::cout << "[" << percentage << "%]" << std::endl;
-    //         lastPercentageCheck = percentage;
-    //     }
-    //
-    //     fileManager.processFile(fileList[i]);
-    // }
 
     std::cout << std::endl << std::endl;
 
