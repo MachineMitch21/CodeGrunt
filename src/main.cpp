@@ -31,6 +31,8 @@ int main(int argc, char** argv)
 
     unsigned int nThreads = std::thread::hardware_concurrency();
 
+    nThreads -= 1;
+
     ArgumentParser argParser;
     PARSE_STAT p_stat = argParser.parseArgs(argc, argv);
 
@@ -92,6 +94,24 @@ int main(int argc, char** argv)
     int fileIndex = 0;
     while (!fileQueue.empty())
     {
+        for (int i = 0; i < nThreads; i++)
+        {
+            if (!fileQueue.empty())
+            {
+                std::string file = fileQueue.back();
+                fileQueue.pop_back();
+                threads.push_back(std::thread(processFile, file));
+            }
+        }
+
+        for (int i = 0; i < threads.size(); i++)
+        {
+            threads[i].join();
+        }
+
+        threads.clear();
+        fileIndex += nThreads;
+
         // Check the percent of the fileList that has been checked so far
         int percentage = round(((float)(fileIndex + 1) / (float)fileListSize) * 100.0f);
         if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
@@ -100,20 +120,6 @@ int main(int argc, char** argv)
             std::cout << "[" << percentage << "%]" << std::endl;
             lastPercentageCheck = percentage;
         }
-
-        std::string file1 = fileQueue.back();
-        fileQueue.pop_back();
-        std::thread secondaryProcess(processFile, file1);
-
-        if (!fileQueue.empty())
-        {
-            std::string file2 = fileQueue.back();
-            fileQueue.pop_back();
-            fileManager.processFile(file2);
-        }
-
-        secondaryProcess.join();
-        fileIndex += 2;
     }
 
     // Keep this code for easy comparison between threaded and non-threaded version for now
