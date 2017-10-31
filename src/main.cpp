@@ -21,7 +21,7 @@ using namespace codegrunt;
 
 #define VERSION "0.2.5"
 
-#define PERCENTAGE_STEP 5
+#define PERCENTAGE_STEP 10
 
 void processFile(std::string& file)
 {
@@ -173,7 +173,7 @@ void printPercentage(int fileIndex, int fileListSize, int& lastPercentageCheck)
     int percentage = round(((float)(fileIndex) / (float)fileListSize) * 100.0f);
     if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
     {
-        std::cout << "[" << percentage << "%]" << std::endl;
+        std::cout << "[" << percentage << "%] " << fileIndex << " of " << fileListSize << " processed.." << std::endl;
         // Only display percentages every 5% as to not spam the console
         lastPercentageCheck = percentage;
     }
