@@ -77,10 +77,7 @@ int main(int argc, char** argv)
 
     std::vector<std::string> fileList = dirParser.getFileList();
 
-    std::cout << "Counting files..." << std::endl << std::endl;
-
     int lastPercentageCheck = 0;
-
 
     // Erase all excluded files
     // TODO: Do this better
@@ -94,6 +91,10 @@ int main(int argc, char** argv)
 
     FileManager fileManager;
     int fileListSize = fileList.size();
+
+    std::cout << "Found " << fileListSize << " files.. " << std::endl << std::endl;
+
+    std::cout << "Processing files..." << std::endl << std::endl;
 
     for (unsigned int i = 0; i < fileList.size(); i++)
     {
