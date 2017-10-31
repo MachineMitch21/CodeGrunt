@@ -94,7 +94,7 @@ int main(int argc, char** argv)
     int fileIndex = 0;
     while (!fileQueue.empty())
     {
-        for (int i = 0; i < nThreads; i++)
+        for (unsigned int i = 0; i < nThreads; i++)
         {
             // Generate a new thread while there are still items in the deque
             if (!fileQueue.empty())
@@ -107,7 +107,7 @@ int main(int argc, char** argv)
 
         // Make sure all our current threads finish executing before we destroy them
         // and start all over again
-        for (int i = 0; i < threads.size(); i++)
+        for (unsigned int i = 0; i < threads.size(); i++)
         {
             threads[i].join();
         }
