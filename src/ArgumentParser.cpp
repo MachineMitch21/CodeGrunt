@@ -1,6 +1,6 @@
 #include "ArgumentParser.h"
 
-namespace lc
+namespace codegrunt
 {
     ArgumentParser::ArgumentParser()
     {

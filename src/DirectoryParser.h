@@ -10,7 +10,7 @@
 #include <iostream>
 #include <stdio.h>
 
-namespace lc
+namespace codegrunt
 {
     class DirectoryParser
     {

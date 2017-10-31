@@ -1,7 +1,6 @@
 #include "SearchManager.h"
 
-
-namespace lc
+namespace codegrunt
 {
     std::map<std::string, SearchData> SearchManager::_searchCriteria;
 

@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 
-namespace lc
+namespace codegrunt
 {
     typedef struct
     {
@@ -19,18 +19,18 @@ namespace lc
         friend class FileManager;
 
     public:
+        LineCounter();
+        ~LineCounter();
         static BiggestFile  getBiggestFile();
         static int          getTotalLines();
 
     private:
-        LineCounter();
-        ~LineCounter();
-
-    private:
-        static void         setBiggestFile(BiggestFile file);
-        static void         updateCount(const std::string& file, int numberOfLines);
         static int          _totalLinesFound;
         static BiggestFile  _biggestFile;
+
+    private:
+        void         setBiggestFile(BiggestFile file);
+        void         updateCount(const std::string& file, int numberOfLines);
     };
 }
 

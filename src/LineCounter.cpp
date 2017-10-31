@@ -1,10 +1,20 @@
 
 #include "LineCounter.h"
 
-namespace lc
+namespace codegrunt
 {
     BiggestFile LineCounter::_biggestFile;
     int         LineCounter::_totalLinesFound;
+
+    LineCounter::LineCounter()
+    {
+
+    }
+
+    LineCounter::~LineCounter()
+    {
+        
+    }
 
     void LineCounter::setBiggestFile(BiggestFile file)
     {

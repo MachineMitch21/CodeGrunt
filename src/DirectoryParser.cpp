@@ -1,7 +1,7 @@
 
 #include "DirectoryParser.h"
 
-namespace lc
+namespace codegrunt
 {
     DirectoryParser::DirectoryParser(const std::string& directory, bool doParse)
     :   _directoryToParse(directory)

@@ -6,8 +6,9 @@
 #include <string>
 #include <vector>
 #include <cstddef>
+#include <iostream>
 
-namespace lc
+namespace codegrunt
 {
 
     typedef struct
@@ -17,10 +18,11 @@ namespace lc
 
     class SearchManager
     {
-
         friend class FileManager;
 
     public:
+        SearchManager();
+        ~SearchManager();
 
         static void addSearchCriteria(const std::string& criteria);
         static void addAllCriteria(const std::vector<std::string>& criteria);
@@ -28,12 +30,11 @@ namespace lc
         static std::map<std::string, SearchData> getAllSearchData();
 
     private:
-        SearchManager();
-        ~SearchManager();
-
-        static void searchLine(const std::string& file, const std::string& line);
-        static int findCriteria(const std::string& criteria, const std::string& line);
         static std::map<std::string, SearchData>   _searchCriteria;
+
+    private:
+        void searchLine(const std::string& file, const std::string& line);
+        int findCriteria(const std::string& criteria, const std::string& line);
     };
 }
 

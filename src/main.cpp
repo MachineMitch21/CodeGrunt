@@ -17,7 +17,7 @@
 #include "FileManager.h"
 #include "ArgumentParser.h"
 
-using namespace lc;
+using namespace codegrunt;
 
 #define VERSION "0.2.5"
 
@@ -28,6 +28,8 @@ void processFile(std::string& file)
     FileManager fileManager;
     fileManager.processFile(file);
 }
+
+void printPercentage(int fileIndex, int fileListSize, int& lastPercentageCheck);
 
 int main(int argc, char** argv)
 {
@@ -66,7 +68,6 @@ int main(int argc, char** argv)
     std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
 
     DirectoryParser dirParser(argParser.getDirectory(), false);
-    FileManager fileManager;
 
     SearchManager::addAllCriteria(argParser.getCommandArguments(COMMAND::SEARCH));
     dirParser.addAllExcludedFiles(argParser.getCommandArguments(COMMAND::EXCLUDE));
@@ -91,46 +92,47 @@ int main(int argc, char** argv)
         }
     }
 
+    FileManager fileManager;
     int fileListSize = fileList.size();
 
-    std::deque<std::string> fileQueue(fileList.begin(), fileList.end());
-
-    std::vector<std::thread> threads;
-
-    int fileIndex = 0;
-    while (!fileQueue.empty())
+    for (unsigned int i = 0; i < fileList.size(); i++)
     {
-        for (unsigned int i = 0; i < nThreads; i++)
-        {
-            // Generate a new thread while there are still items in the deque
-            if (!fileQueue.empty())
-            {
-                std::string file = fileQueue.back();
-                fileQueue.pop_back();
-
-                threads.push_back(std::thread(processFile, std::ref(file)));
-            }
-        }
-
-        // Make sure all our current threads finish executing before we destroy them
-        // and start all over again
-        for (unsigned int i = 0; i < threads.size(); i++)
-        {
-            threads[i].join();
-        }
-
-        fileIndex += threads.size();
-        threads.clear();
-
-        // Check the percent of the fileList that has been checked so far
-        int percentage = round(((float)(fileIndex) / (float)fileListSize) * 100.0f);
-        if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
-        {
-            // Only display percentages every 5% as to not spam the console
-            std::cout << "[" << percentage << "%]" << std::endl;
-            lastPercentageCheck = percentage;
-        }
+        fileManager.processFile(fileList[i]);
+        printPercentage(i, fileListSize, lastPercentageCheck);
     }
+
+    // THREADING CODE IS BUGGY SO IT'S NOT BEING USED RIGHT NOW
+    // TODO: Make the program thread safe
+
+    // std::deque<std::string> fileQueue(fileList.begin(), fileList.end());
+    // std::vector<std::thread> threads;
+    // int fileIndex = 0;
+    // while (!fileQueue.empty())
+    // {
+    //     for (unsigned int i = 0; i < nThreads; i++)
+    //     {
+    //         // Generate a new thread while there are still items in the deque
+    //         if (!fileQueue.empty())
+    //         {
+    //             std::string file = fileQueue.back();
+    //             fileQueue.pop_back();
+    //
+    //             threads.push_back(std::thread(processFile, std::ref(file)));
+    //         }
+    //     }
+    //
+    //     // Make sure all our current threads finish executing before we destroy them
+    //     // and start all over again
+    //     for (unsigned int i = 0; i < threads.size(); i++)
+    //     {
+    //         threads[i].join();
+    //     }
+    //
+    //     fileIndex += threads.size();
+    //     threads.clear();
+    //
+    //     printPercentage(fileIndex, fileListSize, lastPercentageCheck);
+    // }
 
     std::cout << std::endl << std::endl;
 
@@ -162,4 +164,16 @@ int main(int argc, char** argv)
         std::cout << "--------------------END SEARCH CRITERIA------------------------" << std::endl << std::endl;
     }
     return 0;
+}
+
+void printPercentage(int fileIndex, int fileListSize, int& lastPercentageCheck)
+{
+    // Check the percent of the fileList that has been checked so far
+    int percentage = round(((float)(fileIndex) / (float)fileListSize) * 100.0f);
+    if (percentage >= lastPercentageCheck + PERCENTAGE_STEP)
+    {
+        std::cout << "[" << percentage << "%]" << std::endl;
+        // Only display percentages every 5% as to not spam the console
+        lastPercentageCheck = percentage;
+    }
 }

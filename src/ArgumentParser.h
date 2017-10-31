@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-namespace lc
+namespace codegrunt
 {
     enum COMMAND
     {

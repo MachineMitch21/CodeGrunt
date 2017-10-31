@@ -1,6 +1,6 @@
 #include "FileManager.h"
 
-namespace lc
+namespace codegrunt
 {
     FileManager::FileManager()
     {
@@ -14,6 +14,9 @@ namespace lc
 
     void FileManager::processFile(const std::string& path)
     {
+        SearchManager searchManager;
+        LineCounter lineCounter;
+
         std::ifstream fis(path);
 
         int numberOfLines = 0;
@@ -23,12 +26,12 @@ namespace lc
             std::string line;
             while(std::getline(fis, line))
             {
-                SearchManager::searchLine(path, line);
+                searchManager.searchLine(path, line);
                 numberOfLines++;
             }
         }
 
-        LineCounter::updateCount(path, numberOfLines);
+        lineCounter.updateCount(path, numberOfLines);
 
         fis.close();
     }

@@ -6,7 +6,7 @@
 
 #include <fstream>
 
-namespace lc
+namespace codegrunt
 {
     class FileManager
     {
