@@ -1,7 +1,13 @@
 #include <iostream>
 #include <cmath>
+
+#ifdef __MINGW32__
 #include <mingw.thread.h>
 #include <mingw.mutex.h>
+#else
+#include <thread>
+#endif // __WIN32_MINGW__
+
 #include <deque>
 #include <ctime>
 
@@ -101,7 +107,8 @@ int main(int argc, char** argv)
             {
                 std::string file = fileQueue.back();
                 fileQueue.pop_back();
-                threads.push_back(std::thread(processFile, file));
+
+                threads.push_back(std::thread(processFile, std::ref(file)));
             }
         }
 

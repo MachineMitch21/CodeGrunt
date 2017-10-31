@@ -132,12 +132,8 @@ namespace lc
             // Append a backslash if there isn't one so listdir recieves correct input format
             if (finalChar != "\\" && finalChar != "/")
             {
-                directory += "\\";
+                directory += "/";
             }
-        }
-        else
-        {
-            std::cerr << "ERROR: Trying to add seperator to file.  Action ignored" << std::endl;
         }
     }
 

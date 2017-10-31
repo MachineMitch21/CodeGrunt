@@ -13,3 +13,7 @@ SET(CMAKE_CXX_FLAGS "-std=c++17 -g -Wall")
 file(GLOB SOURCES src/*.cpp src/*.c src/*.cc src/*.h src/*.hpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
+
+if (UNIX)
+target_link_libraries(${PROJECT_NAME} -lpthread)
+endif (UNIX)
