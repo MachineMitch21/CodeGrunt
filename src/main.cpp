@@ -6,6 +6,7 @@
 #include <mingw.mutex.h>
 #else
 #include <thread>
+#include <mutex>
 #endif // __WIN32_MINGW__
 
 #include <deque>
@@ -65,7 +66,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    std::cout << "\n\n\n--------------- LINES -- VERSION " << VERSION << "----------------\n\n\n";
+    std::cout << "\n\n\n--------------- CODEGRUNT -- VERSION " << VERSION << "----------------\n\n\n";
 
     DirectoryParser dirParser(argParser.getDirectory(), false);
 
@@ -78,16 +79,6 @@ int main(int argc, char** argv)
     std::vector<std::string> fileList = dirParser.getFileList();
 
     int lastPercentageCheck = 0;
-
-    // Erase all excluded files
-    // TODO: Do this better
-    for (unsigned int i = 0; i < fileList.size(); i++)
-    {
-        if (dirParser.isExcluded(fileList[i]))
-        {
-            fileList.erase(fileList.begin() + i);
-        }
-    }
 
     FileManager fileManager;
     int fileListSize = fileList.size();

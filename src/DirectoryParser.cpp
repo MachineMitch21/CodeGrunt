@@ -87,7 +87,12 @@ namespace codegrunt
                 }
                 else
                 {
-                    fileList.push_back(name);
+                    // Go ahead and check internally whether or not a fileName is excluded from
+                    // processing or not
+                    if (!isExcluded(name))
+                    {
+                        fileList.push_back(name);
+                    }
                 }
             }
 
