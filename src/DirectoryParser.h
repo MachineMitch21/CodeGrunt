@@ -22,6 +22,10 @@ namespace codegrunt
         void addAllExcludedFiles(const std::vector<std::string>& files);
         bool isExcluded(const std::string& file);
 
+        void addExtFilter(const std::string& filter);
+        void addAllExtFilters(const std::vector<std::string>& filters);
+        bool hasFilteredExt(const std::string& file);
+
         std::vector<std::string>& getFileList();
 
         void parse();
@@ -35,7 +39,9 @@ namespace codegrunt
     private:
         std::vector<std::string>    _fileList;
         std::vector<std::string>    _excludedFiles;
+        std::vector<std::string>    _extFilters;
         std::string                 _directoryToParse;
+
     };
 }
 

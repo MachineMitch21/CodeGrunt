@@ -4,11 +4,13 @@ namespace codegrunt
 {
     ArgumentParser::ArgumentParser()
     {
-        _commands.emplace("--search",   SEARCH);
-        _commands.emplace("--exclude",  EXCLUDE);
+        _commands.emplace("--search",       SEARCH);
+        _commands.emplace("--exclude",      EXCLUDE);
+        _commands.emplace("--ext-filter",   EXT_FILTER);
 
-        _cmdArgs.emplace(SEARCH,    std::vector<std::string> {});
-        _cmdArgs.emplace(EXCLUDE,   std::vector<std::string> {});
+        _cmdArgs.emplace(SEARCH,        std::vector<std::string> {});
+        _cmdArgs.emplace(EXCLUDE,       std::vector<std::string> {});
+        _cmdArgs.emplace(EXT_FILTER,    std::vector<std::string> {});
     }
 
     ArgumentParser::~ArgumentParser()

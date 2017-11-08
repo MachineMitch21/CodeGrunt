@@ -72,6 +72,7 @@ int main(int argc, char** argv)
 
     SearchManager::addAllCriteria(argParser.getCommandArguments(COMMAND::SEARCH));
     dirParser.addAllExcludedFiles(argParser.getCommandArguments(COMMAND::EXCLUDE));
+    dirParser.addAllExtFilters(argParser.getCommandArguments(COMMAND::EXT_FILTER));
 
     std::cout << "Locating files..." << std::endl << std::endl;
     dirParser.parse();

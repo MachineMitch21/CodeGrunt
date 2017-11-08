@@ -10,7 +10,8 @@ namespace codegrunt
     enum COMMAND
     {
         EXCLUDE     = 0,
-        SEARCH      = 1
+        SEARCH      = 1,
+        EXT_FILTER  = 2
     };
 
     enum PARSE_STAT

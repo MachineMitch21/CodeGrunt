@@ -19,6 +19,40 @@ namespace codegrunt
 
     }
 
+    void DirectoryParser::addExtFilter(const std::string& filter)
+    {
+        _extFilters.push_back(filter);
+    }
+
+    void DirectoryParser::addAllExtFilters(const std::vector<std::string>& filters)
+    {
+        _extFilters = filters;
+    }
+
+    bool DirectoryParser::hasFilteredExt(const std::string& file)
+    {
+        std::size_t lastPeriod = file.find_last_of('.');
+        std::string ext;
+
+        if (lastPeriod != std::string::npos)
+        {
+            ext = file.substr(lastPeriod, file.length() - lastPeriod);
+        }
+
+        if (lastPeriod != std::string::npos)
+        {
+            for (unsigned int i = 0; i < _extFilters.size(); i++)
+            {
+                if (ext == _extFilters[i])
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     void DirectoryParser::addExcludedFile(const std::string& file)
     {
         _excludedFiles.push_back(file);
@@ -89,7 +123,7 @@ namespace codegrunt
                 {
                     // Go ahead and check internally whether or not a fileName is excluded from
                     // processing or not
-                    if (!isExcluded(name))
+                    if (!isExcluded(name) && hasFilteredExt(name))
                     {
                         fileList.push_back(name);
                     }
