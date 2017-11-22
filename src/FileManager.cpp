@@ -35,4 +35,39 @@ namespace codegrunt
 
         fis.close();
     }
+
+    std::string readFile(const std::string& path)
+    {
+        std::ifstream fis(path);
+        std::string src;
+
+        if (fis.is_open())
+        {
+            std::string line;
+            while (std::getline(fis, line))
+            {
+                src += line;
+                src += "\0";
+            }
+        }
+
+        return src;
+    }
+
+    std::vector<std::string> readFileLines(const std::string& path)
+    {
+        std::ifstream fis(path);
+        std::vector<std::string> lines;
+
+        if (fis.is_open())
+        {
+            std::string line;
+            while (std::getline(fis, line))
+            {
+                lines.push_back(line);
+            }
+        }
+
+        return lines;
+    }
 }

@@ -28,9 +28,9 @@ namespace codegrunt
         ArgumentParser();
         ~ArgumentParser();
 
+        PARSE_STAT parseArgs(int argc, char** argv);
         std::string getDirectory();
         std::vector<std::string> getCommandArguments(COMMAND cmd);
-        PARSE_STAT parseArgs(int argc, char** argv);
 
     private:
         bool isCommand(const std::string& arg);

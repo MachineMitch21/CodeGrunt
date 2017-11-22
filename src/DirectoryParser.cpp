@@ -1,5 +1,6 @@
 
 #include "DirectoryParser.h"
+#include <iostream>
 
 namespace codegrunt
 {
@@ -31,26 +32,31 @@ namespace codegrunt
 
     bool DirectoryParser::hasFilteredExt(const std::string& file)
     {
-        std::size_t lastPeriod = file.find_last_of('.');
-        std::string ext;
-
-        if (lastPeriod != std::string::npos)
+        // Only check for an extension on the given (file) string
+        // if _extFilters vector has elements
+        if (_extFilters.size() > 0)
         {
-            ext = file.substr(lastPeriod, file.length() - lastPeriod);
-        }
+            std::size_t lastPeriod = file.find_last_of('.');
+            std::string ext;
 
-        if (lastPeriod != std::string::npos)
-        {
-            for (unsigned int i = 0; i < _extFilters.size(); i++)
+            if (lastPeriod != std::string::npos)
             {
-                if (ext == _extFilters[i])
+                ext = file.substr(lastPeriod, file.length() - lastPeriod);
+
+                for (unsigned int i = 0; i < _extFilters.size(); i++)
                 {
-                    return true;
+                    if (ext == _extFilters[i])
+                    {
+                        return true;
+                    }
                 }
             }
+
+            return false;
         }
 
-        return false;
+        // Default to true if execution reaches this point
+        return true;
     }
 
     void DirectoryParser::addExcludedFile(const std::string& file)

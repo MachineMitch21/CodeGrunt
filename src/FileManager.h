@@ -5,6 +5,8 @@
 #include "SearchManager.h"
 
 #include <fstream>
+#include <string>
+#include <vector>
 
 namespace codegrunt
 {
@@ -15,9 +17,10 @@ namespace codegrunt
         ~FileManager();
 
         void processFile(const std::string& path);
+        std::string readFile(const std::string& path);
+        std::vector<std::string> readFileLines(const std::string& path);
 
     private:
-        std::string readFile(const std::string& path);
     };
 }
 
