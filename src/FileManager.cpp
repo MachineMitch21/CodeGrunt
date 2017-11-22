@@ -36,7 +36,7 @@ namespace codegrunt
         fis.close();
     }
 
-    std::string readFile(const std::string& path)
+    std::string FileManager::readFile(const std::string& path)
     {
         std::ifstream fis(path);
         std::string src;
@@ -54,7 +54,7 @@ namespace codegrunt
         return src;
     }
 
-    std::vector<std::string> readFileLines(const std::string& path)
+    std::vector<std::string> FileManager::readFileLines(const std::string& path)
     {
         std::ifstream fis(path);
         std::vector<std::string> lines;
@@ -69,5 +69,17 @@ namespace codegrunt
         }
 
         return lines;
+    }
+
+    int FileManager::fileSize(const std::string& path)
+    {
+        std::ifstream ifs;
+        int size;
+
+        ifs.open(path, std::ios::binary);
+        ifs.seekg(0, std::ios::end);
+
+        size = ifs.tellg();
+        return size;
     }
 }

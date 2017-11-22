@@ -13,7 +13,7 @@ namespace codegrunt
 
     LineCounter::~LineCounter()
     {
-        
+
     }
 
     void LineCounter::setBiggestFile(BiggestFile file)
@@ -35,8 +35,10 @@ namespace codegrunt
     {
         if (numberOfLines > _biggestFile.Lines)
         {
+            FileManager fileManager;
             _biggestFile.Name = file;
             _biggestFile.Lines = numberOfLines;
+            _biggestFile.Size = fileManager.fileSize(file);
         }
 
         _totalLinesFound += numberOfLines;

@@ -2,6 +2,7 @@
 #ifndef LINECOUNTER_H
 #define LINECOUNTER_H
 
+#include "FileManager.h"
 #include <string>
 #include <fstream>
 
@@ -9,8 +10,9 @@ namespace codegrunt
 {
     typedef struct
     {
-        int Lines;
         std::string Name;
+        int Lines;
+        int Size;
     }   BiggestFile;
 
     class LineCounter

@@ -131,14 +131,15 @@ int main(int argc, char** argv)
 
     duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 
-    std::cout << "Execution took: " << duration << " seconds." << std::endl << std::endl;
+    std::cout << "Execution TIME:               " << duration << " seconds" << std::endl << std::endl;
 
-    std::cout << "TOTAL LINES FOUND:    " << LineCounter::getTotalLines() << std::endl << std::endl;
+    std::cout << "TOTAL LINES FOUND:            " << LineCounter::getTotalLines() << std::endl << std::endl;
 
-    std::cout << "Biggest FILE:         " << LineCounter::getBiggestFile().Name << std::endl << std::endl;
+    std::cout << "BIGGEST FILE:                 " << LineCounter::getBiggestFile().Name << std::endl << std::endl;
 
-    std::cout << "Biggest FILE LINES:   " << LineCounter::getBiggestFile().Lines << std::endl << std::endl;
+    std::cout << "BIGGEST FILE LINES:           " << LineCounter::getBiggestFile().Lines << std::endl << std::endl;
 
+    std::cout << "BIGGEST FILE SIZE (bytes):    " << LineCounter::getBiggestFile().Size << std::endl << std::endl;
 
     std::map<std::string, SearchData> searchResults = SearchManager::getAllSearchData();
 
