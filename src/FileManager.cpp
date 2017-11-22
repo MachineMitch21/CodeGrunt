@@ -17,14 +17,14 @@ namespace codegrunt
         SearchManager searchManager;
         LineCounter lineCounter;
 
-        std::ifstream fis(path);
+        std::ifstream ifs(path);
 
         int numberOfLines = 0;
 
-        if (fis.is_open())
+        if (ifs.is_open())
         {
             std::string line;
-            while(std::getline(fis, line))
+            while(std::getline(ifs, line))
             {
                 searchManager.searchLine(path, line);
                 numberOfLines++;
@@ -33,53 +33,58 @@ namespace codegrunt
 
         lineCounter.updateCount(path, numberOfLines);
 
-        fis.close();
+        ifs.close();
     }
 
     std::string FileManager::readFile(const std::string& path)
     {
-        std::ifstream fis(path);
+        std::ifstream ifs(path);
         std::string src;
 
-        if (fis.is_open())
+        if (ifs.is_open())
         {
             std::string line;
-            while (std::getline(fis, line))
+            while (std::getline(ifs, line))
             {
                 src += line;
                 src += "\0";
             }
         }
 
+        ifs.close();
         return src;
     }
 
     std::vector<std::string> FileManager::readFileLines(const std::string& path)
     {
-        std::ifstream fis(path);
+        std::ifstream ifs(path);
         std::vector<std::string> lines;
 
-        if (fis.is_open())
+        if (ifs.is_open())
         {
             std::string line;
-            while (std::getline(fis, line))
+            while (std::getline(ifs, line))
             {
                 lines.push_back(line);
             }
         }
 
+        ifs.close();
         return lines;
     }
 
     int FileManager::fileSize(const std::string& path)
     {
         std::ifstream ifs;
-        int size;
 
         ifs.open(path, std::ios::binary);
+        return fileSize(ifs);
+    }
+
+    int FileManager::fileSize(std::ifstream& ifs)
+    {
         ifs.seekg(0, std::ios::end);
 
-        size = ifs.tellg();
-        return size;
+        return ifs.tellg();
     }
 }

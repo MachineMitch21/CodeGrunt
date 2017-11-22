@@ -140,6 +140,8 @@ int main(int argc, char** argv)
     std::cout << "BIGGEST FILE LINES:           " << LineCounter::getBiggestFile().Lines << std::endl << std::endl;
 
     std::cout << "BIGGEST FILE SIZE (bytes):    " << LineCounter::getBiggestFile().Size << std::endl << std::endl;
+    std::cout << "BIGGEST FILE SIZE (kb):       " << (float)LineCounter::getBiggestFile().Size / (1024) << std::endl << std::endl;  
+    std::cout << "BIGGEST FILE SIZE (mb):       " << (float)LineCounter::getBiggestFile().Size / (1024 * 1024) << std::endl << std::endl;
 
     std::map<std::string, SearchData> searchResults = SearchManager::getAllSearchData();
 

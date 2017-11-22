@@ -20,6 +20,7 @@ namespace codegrunt
         std::string readFile(const std::string& path);
         std::vector<std::string> readFileLines(const std::string& path);
         int fileSize(const std::string& path);
+        int fileSize(std::ifstream& ifs);
 
     private:
     };
